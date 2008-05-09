@@ -227,9 +227,10 @@ if (typeof(JSIO) != 'boolean') {
       return FileIO.open(path);
     },
 
-    create : function(dir) {
+    create : function(str) {
+      var d = DirIO.open(str);
       try {
-        dir.create(0x01, 0664);
+        d.create(0x01, 0664);
         return true;
       }
       catch(e) {
@@ -297,24 +298,13 @@ if (typeof(JSIO) != 'boolean') {
       return FileIO.path(dir);
     },
 
-    split  : function(str, join) {
-      var arr = str.split(/\/|\\/), i;
-      str = new String();
-      for (i = 0; i < arr.length; ++i) {
-        str += arr[i] + ((i != arr.length - 1) ? 
-                    join : '');
-      }
-      return str;
+    split  : function(str) {
+      return str.split(/\/|\\/);
     },
 
-    join   : function(str, split) {
-      var arr = str.split(split), i;
-      str = new String();
-      for (i = 0; i < arr.length; ++i) {
-        str += arr[i] + ((i != arr.length - 1) ? 
-                    this.sep : '');
-      }
-      return str;
+    join   : function() {
+      ary = []; for (var x = 0; x < arguments.length; x++) { ary.push(arguments[x]); }
+      return ary.join(this.sep);
     }
   
   }

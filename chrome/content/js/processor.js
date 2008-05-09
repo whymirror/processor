@@ -1,9 +1,9 @@
 var Processor = {
-  file_re: /\/([^\/]+?)(\.pde)?$/,
-  file_picker: function(mode) {
+  file_re: /[\\\/]([^\\\/]+?)(\.pde)?$/,
+  file_picker: function(title, mode) {
     var nsIFilePicker = Components.interfaces.nsIFilePicker;
     var fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    fp.init(window, "Select a File", nsIFilePicker[mode]);
+    fp.init(window, title, nsIFilePicker[mode]);
     fp.appendFilter("Processing Scripts","*.pde");
     fp.appendFilters(nsIFilePicker.filterAll | nsIFilePicker.filterText);
 
@@ -14,10 +14,13 @@ var Processor = {
     return null;
   },
   ask_open_file: function() {
-    return Processor.file_picker("modeOpen");
+    return Processor.file_picker("Open File...", "modeOpen");
+  },
+  ask_open_dir: function() {
+    return Processor.file_picker("Export as a XUL app folder...", "modeGetFolder");
   },
   ask_save_file: function() {
-    return Processor.file_picker("modeSave");
+    return Processor.file_picker("Save File...", "modeSave");
   },
 
   name_active_tab: function(path) {
@@ -25,6 +28,51 @@ var Processor = {
     if (m)
       path = m[1];
     $(".scripton caption").text(path);
+  },
+
+  export_to_xulapp: function(dir) {
+    var name = DirIO.split(dir.path).pop();
+    var ini = FileIO.open(DirIO.join(dir.path, "application.ini"));
+    FileIO.write(ini,
+      "[App]\nVendor=whoknows\nName="+name+"\nVersion=1.0\nBuildID=20080101\n" +
+      "Copyright=Copyright (c) 2008\nID="+name+"@processor.hackety.org\n\n" +
+      "[Gecko]\nMinVersion=1.8\nMaxVersion=1.9.0.*\n");
+
+    DirIO.create(DirIO.join(dir.path, "chrome", "content"));
+    DirIO.create(DirIO.join(dir.path, "defaults"));
+    DirIO.create(DirIO.join(dir.path, "defaults", "preferences"));
+
+    var manifest = FileIO.open(DirIO.join(dir.path, "chrome", "chrome.manifest"));
+    FileIO.write(manifest, "content "+name+" file:content/");
+
+    var chromed = DirIO.get("AChrom");
+    var pjs = FileIO.open(DirIO.join(chromed.path, "content", "js", "processing.js"));
+    var pjsCopy = FileIO.open(DirIO.join(dir.path, "chrome", "content", "processing.js"));
+    FileIO.write(pjsCopy, FileIO.read(pjs));
+
+    var xul = FileIO.open(DirIO.join(dir.path, "chrome", "content", "main.xul"));
+    var ecode = $("#editor").val().
+      replace(/\\/g, "\\\\").
+      replace(/\n/g, "\\n").
+      replace(/"/g,  '\\"').
+      replace(/</g,  '&lt;').
+      replace(/>/g,  '&gt;');
+    FileIO.write(xul,
+      '<?xml version="1.0"?>\n' +
+      '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>\n' +
+      '<window id="main" title="' + name + '"\n' +
+      ' xmlns:html="http://www.w3.org/1999/xhtml"\n' +
+      ' xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">\n' +
+      '<script src="processing.js" />\n' +
+      '<vbox flex="1"><html:canvas id="stage"></html:canvas></vbox>\n' +
+      '<script>\n' +
+      'var c = document.getElementById("stage");\n' +
+      'Processing(c, "' + ecode + '");\n' +
+      '</script>\n' +
+      '</window>\n');
+
+    var prefs = FileIO.open(DirIO.join(dir.path, "defaults", "preferences", "prefs.js"));
+    FileIO.write(prefs, 'pref("toolkit.defaultChromeURI", "chrome://' + name + '/content/main.xul");');
   },
 
   start: function() {
@@ -59,7 +107,9 @@ var Processor = {
       }
     });
     $("#pressExport").click(function() {
-      alert("No export formats at this time.");
+      var dir = Processor.ask_open_dir();
+      if (dir)
+        Processor.export_to_xulapp(dir);
     });
 
     $("#pressRun").click(function() {
