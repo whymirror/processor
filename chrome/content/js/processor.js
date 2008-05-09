@@ -64,7 +64,8 @@ var Processor = {
       ' xmlns:html="http://www.w3.org/1999/xhtml"\n' +
       ' xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">\n' +
       '<script src="processing.js" />\n' +
-      '<vbox flex="1"><html:canvas id="stage"></html:canvas></vbox>\n' +
+      '<vbox flex="1"><hbox><html:canvas id="stage"></html:canvas>' +
+      '<spacer flex="1" /></hbox></vbox>\n' +
       '<script>\n' +
       'var c = document.getElementById("stage");\n' +
       'Processing(c, "' + ecode + '");\n' +
@@ -109,7 +110,10 @@ var Processor = {
     $("#pressExport").click(function() {
       var dir = Processor.ask_open_dir();
       if (dir)
+      {
         Processor.export_to_xulapp(dir);
+        alert("Export complete.");
+      }
     });
 
     $("#pressRun").click(function() {
