@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="processor.css" type="text/css"?>
+
+<window id="main" title="Processor.js" width="490" height="570"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="js/io.js" />
+  <script src="js/jquery.js" />
+  <script src="js/processing.js" />
+  <script src="js/processor.js" />
+
+  <hbox id="pixelbuttons">
+    <image class="pixelbutton" id="pressRun" />
+    <image class="pixelbutton" id="pressStop" />
+    <spacer width="20" />
+    <image class="pixelbutton" id="pressNew" />
+    <image class="pixelbutton" id="pressOpen" />
+    <image class="pixelbutton" id="pressSave" />
+    <image class="pixelbutton" id="pressExport" />
+    <caption class="status" />
+    <spacer flex="1" />
+  </hbox>
+  <hbox id="scripttabs">
+    <vbox class="scripton title"><caption>New</caption></vbox>
+    <!--
+    <vbox class="scriptoff title"><caption>Loaded</caption></vbox>
+    -->
+    <spacer flex="1" />
+  </hbox>
+  <textbox id="editor" multiline="true" flex="1" />
+  <hbox id="editorstat">
+    <caption>1</caption>
+  </hbox>
+  <panel id="popup">
+    <html:canvas></html:canvas>
+  </panel>
+</window>

@@ -1,0 +1,62 @@
+@import url(chrome://global/skin/);
+
+#pixelbuttons {
+  background-color: #66665a;
+}
+#pixelbuttons .status {
+  color: white;
+  font-weight: normal;
+  margin: 8px 8px 0 8px;
+}
+.pixelbutton {
+  background: url(images/buttons.gif);
+  width: 28px;
+  height: 32px;
+  cursor: pointer;
+}
+
+#pressRun          { background-position: 0px   -66px; }
+#pressRun:hover    { background-position: 0px   -33px; }
+#pressStop         { background-position: 165px -66px; }
+#pressStop:hover   { background-position: 165px -33px; }
+#pressNew          { background-position: 132px -66px; }
+#pressNew:hover    { background-position: 132px -33px; }
+#pressOpen         { background-position: 99px  -66px; }
+#pressOpen:hover   { background-position: 99px  -33px; }
+#pressSave         { background-position: 66px  -66px; }
+#pressSave:hover   { background-position: 66px  -33px; }
+#pressExport       { background-position: 33px  -66px; }
+#pressExport:hover { background-position: 33px  -33px; }
+
+#scripttabs {
+  background-color: #999988;
+  margin: 0;
+  padding: 0 10px;
+}
+#scripttabs .title {
+  margin: 6px 2px 0px 2px;
+  border-top: solid 2px #BBBBAA;
+  cursor: pointer;
+}
+#scripttabs .title caption {
+  color: black;
+  font-weight: normal;
+  background-color: #BBBBAA;
+  padding: 5px 8px;
+  margin: 0px -2px;
+}
+#scripttabs .scriptoff caption {
+  background: none;
+  border-left: solid 2px #BBBBAA;
+  border-right: solid 2px #BBBBAA;
+  color: white;
+}
+
+#editorstat {
+  background-color: #66665a;
+}
+#editorstat caption {
+  color: white;
+  font-weight: normal;
+  padding: 5px 8px;
+}
