@@ -230,7 +230,7 @@ if (typeof(JSIO) != 'boolean') {
     create : function(str) {
       var d = DirIO.open(str);
       try {
-        d.create(0x01, 0664);
+        d.create(0x01, 0775);
         return true;
       }
       catch(e) {
