@@ -1,0 +1,6 @@
+This is totally easiest to use if you've got Firefox 3:
+
+  firefox3 -app application.ini
+
+All it really does is save and load and run apps, but 
+that's okay with me.
